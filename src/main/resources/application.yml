@@ -13,3 +13,7 @@ spring:
     url: jdbc:h2:mem:testdb
     username: sa
     password:
+
+token:
+  expiration_time: 86400000
+  secret: user_token

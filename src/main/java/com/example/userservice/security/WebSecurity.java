@@ -44,7 +44,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     private AuthenticationFilter getAuthenticationFilter() throws Exception{
         AuthenticationFilter authenticationFilter
-                = new AuthenticationFilter(authenticationManager());
+                = new AuthenticationFilter(authenticationManager(), userService, env);
+
         return authenticationFilter;
     }
 
