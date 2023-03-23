@@ -20,7 +20,6 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<ResponseUser> createUser(@RequestBody RequestUser user){
-        // 변환하기 전 준비사항 2줄
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -31,4 +30,16 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseUser);
     }
+
+
 }
+
+
+
+
+
+
+
+
+
+

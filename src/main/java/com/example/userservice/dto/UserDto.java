@@ -13,6 +13,6 @@ public class UserDto {
     private String pwd;
     private String name;
 
-    private String encryptedPwd;
-    private String decryptedPwd;
+    private String encrypedPwd;
+    private String decrypedPwd;
 }

@@ -16,16 +16,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     public AuthenticationFilter(AuthenticationManager authenticationManager){
         super.setAuthenticationManager(authenticationManager);
     }
 
-    // 로그인 시도하면 가장 먼저 호출되는 함수
-    // 인증되기 전까지의 사전 작업
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
                                                 HttpServletResponse response) throws AuthenticationException {
-        try{
+        try {
             RequestLogin creds = new ObjectMapper().readValue(request.getInputStream(),
                     RequestLogin.class);
 

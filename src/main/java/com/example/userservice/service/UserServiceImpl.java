@@ -7,7 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,19 +22,18 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
 
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder passwordEncoder;
 
-    //실질적인 id, password 처리
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(username);
 
-        if(userEntity == null) {
+        if(userEntity == null){
             throw new UsernameNotFoundException(username + ": not found");
         }
 
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPwd(),
-                true, true, true,true, new ArrayList<>());
+        return new User(userEntity.getEmail(), userEntity.getEncrypedPwd(),
+                true, true, true, true, new ArrayList<>());
     }
 
     @Override
@@ -45,10 +43,10 @@ public class UserServiceImpl implements UserService{
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        UserEntity userEntity = mapper.map(userDto, UserEntity.class); //userDTO를 UserEntity class에 복사
-        userEntity.setEncryptedPwd(bCryptPasswordEncoder.encode(userDto.getPwd()));
+        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
+        userEntity.setEncrypedPwd(passwordEncoder.encode(userDto.getPwd()));
 
-        userRepository.save(userEntity); //DB에 저장
+        userRepository.save(userEntity);
 
         UserDto returnUserDto = mapper.map(userEntity, UserDto.class);
 
