@@ -32,9 +32,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/users").permitAll(); //'/users'로 들어오는 것은 허락해줘
         http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+        http.authorizeRequests().antMatchers("/error/**").permitAll();
+        http.authorizeRequests().antMatchers("/login").permitAll();
 
         http.authorizeRequests().antMatchers("/**")
-                .hasIpAddress("localhost")
+                .hasIpAddress("127.0.0.1")
                 .and()
                 .addFilter(getAuthenticationFilter());
 
