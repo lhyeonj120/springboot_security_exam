@@ -24,6 +24,7 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    //실질적인 id, password 처리
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(username);
@@ -43,14 +44,30 @@ public class UserServiceImpl implements UserService{
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        UserEntity userEntity = mapper.map(userDto, UserEntity.class);
+        UserEntity userEntity = mapper.map(userDto, UserEntity.class); //userDTO를 UserEntity class에 복사
         userEntity.setEncrypedPwd(passwordEncoder.encode(userDto.getPwd()));
 
-        userRepository.save(userEntity);
+        userRepository.save(userEntity); //DB에 저장
 
         UserDto returnUserDto = mapper.map(userEntity, UserDto.class);
 
         return returnUserDto;
+    }
+
+    @Override
+    public UserDto getUserDetailByEmail(String userName) {
+        UserEntity userEntity = userRepository.findByEmail(userName);
+
+        if(userEntity == null){
+            throw new UsernameNotFoundException(userName);
+        }
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        UserDto userDto = mapper.map(userEntity, UserDto.class);
+
+        return userDto;
     }
 
     @Override
